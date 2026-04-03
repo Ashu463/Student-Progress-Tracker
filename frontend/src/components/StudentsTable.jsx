@@ -3,7 +3,7 @@ import { Plus, Edit2, Trash2, Eye, Download } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 
-const API_BASE = 'https://tleeleminatorsbackend.vercel.app';
+const API_BASE = 'https://tle-eleminators-backend.vercel.app/';
 
 const StudentsTable = ({ students, onAdd, onEdit, onDelete, onViewDetails }) => {
   const { isDark } = useTheme();
