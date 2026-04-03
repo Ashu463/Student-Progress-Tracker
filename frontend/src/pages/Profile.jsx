@@ -5,6 +5,9 @@ import studentData from '../api/student_data';
 import RatingChart from '../components/RatingChart';
 import ProblemStats from '../components/ProblemStats';
 import { Mail, Clock } from 'lucide-react';
+import CoachInsights from "../components/CoachInsights";
+import ProblemRecommender from "../components/ProblemRecommender";
+
 import axios from 'axios';
 
 const API_BASE = 'https://tleeleminatorsbackend.vercel.app';
@@ -75,7 +78,6 @@ const Profile = () => {
             </p>
           </div>
         </div>
-
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <Mail className="h-4 w-4 text-gray-500" />
@@ -98,9 +100,9 @@ const Profile = () => {
             onClick={() => setActiveTab('contests')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'contests'
-                ? 'border-blue-500 text-blue-600'
+              ? 'border-blue-500 text-blue-600'
                 : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
+              }`}
           >
             Contest History
           </button>
@@ -108,8 +110,8 @@ const Profile = () => {
             onClick={() => setActiveTab('problems')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'problems'
-                ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+              ? 'border-blue-500 text-blue-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
             Problem Solving
@@ -194,8 +196,8 @@ const Profile = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm">
                         <span className={`px-2 py-1 rounded-full text-xs ${
                           contest.rating_change >= 0
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-red-100 text-red-800'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-red-100 text-red-800'
                         }`}>
                           {contest.rating_change >= 0 ? '+' : ''}{contest.rating_change}
                         </span>
@@ -209,6 +211,8 @@ const Profile = () => {
               </table>
             </div>
           </div>
+          <CoachInsights handle={student.codeforces_handle} />
+          <ProblemRecommender handle={student.codeforces_handle} />
     </div>
   );
 };

@@ -1,9 +1,50 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import {Student} from '../db/index.js';
 import { fetchCodeforcesUserData } from './utils/fetch_data.js';
+import axios from "axios";
+import {
+  getCoachInsights,
+  getRecommendedProblems,
+} from './utils/ai_services.js'
+
 
 const apiRouter = express.Router();
 apiRouter.use(express.json());
+
+let problemPoolCache = null;
+
+export const getProblemPool = async () => {
+  try {
+
+    if (problemPoolCache) {
+      return problemPoolCache;
+    }
+
+    const res = await axios.get(
+      "https://codeforces.com/api/problemset.problems"
+    );
+
+    const problems = res.data.result.problems;
+
+    problemPoolCache = problems;
+
+    // refresh cache every 1 hour
+    setTimeout(() => {
+      problemPoolCache = null;
+    }, 3600000);
+
+    return problems;
+
+  } catch (error) {
+
+    console.error("Failed to fetch Codeforces problem pool:", error.message);
+
+    throw new Error("Problem pool fetch failed");
+  }
+};
+
 apiRouter.get('/students', async (req, res) => {
   try {
     const students = await Student.find();
@@ -86,6 +127,50 @@ apiRouter.get('/students/:handle', async (req, res) => {
   } catch (error) {
     res.status(500).json({success: false, error: 'Failed to fetch student' });
   }
+});
+
+
+// Coach Insights
+apiRouter.get("/ai/coach/:handle", async (req, res) => {
+  console.log("Insights route hit", req.params.handle);
+  try {
+    const student = await Student.findOne({
+      codeforces_handle: req.params.handle,
+    });
+    if (!student) return res.status(404).json({ error: "Student not found" });
+
+    const insights = await getCoachInsights(student);
+    res.json({ success: true, insights });
+  } catch (err) {
+    console.error("Coach AI error:", err);
+    res.status(500).json({ error: "Failed to generate insights" });
+  }
+});
+
+// Problem Recommender
+apiRouter.get("/ai/recommend/:handle", async (req, res) => {
+  
+  try {
+    const student = await Student.findOne({
+      codeforces_handle: req.params.handle,
+    });
+    if (!student) return res.status(404).json({ error: "Student not found" });
+
+    const problemPool = await getProblemPool();
+    const recommendations = await getRecommendedProblems(student, problemPool);
+    res.json({ success: true, recommendations });
+  } catch (err) {
+    console.error("Recommender AI error:", err);
+    res.status(500).json({ error: "Failed to generate recommendations" });
+  }
+});
+apiRouter.get("/ai/list-models", async (req, res) => {
+  console.log("KEY LOADED:", process.env.GEMINI_API_KEY?.slice(0, 10));
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models?key=${process.env.GEMINI_API_KEY}`
+  );
+  const data = await response.json();
+  res.json(data);
 });
 apiRouter.get('/health', (req, res) => {
   res.send('Hello from the backend API!');

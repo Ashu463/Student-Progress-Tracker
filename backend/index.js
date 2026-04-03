@@ -29,7 +29,7 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
     console.error('Error connecting to the database', err);
   });;
 
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port :${PORT}`);
-// });
+app.listen(PORT, () => {
+  console.log(`Server is running on port :${PORT}`);
+});
 export default app;

@@ -2,6 +2,8 @@ import cron from 'node-cron';
 import { Student, AppSetting } from '../../db/index.js';
 import { fetchCodeforcesUserData } from './fetch_data.js';
 import { checkInactivityAndSendEmail } from './email_sender.js';
+import { getWeeklySummary, getRecommendedProblems } from './ai_services.js'
+
 
 export const startCron = async () => {
   const settings = await AppSetting.findOne({});
@@ -50,3 +52,35 @@ export const startCron = async () => {
     }
   });
 };
+
+cron.schedule("0 9 * * 0", async () => {
+  console.log("Running Sunday AI digest...");
+  const students = await Student.find({ email: { $exists: true } });
+
+  for (const student of students) {
+    try {
+      const summary = await getWeeklySummary(student);
+
+      // Reuse your existing sendEmail function
+      await checkInactivityAndSendEmail({
+        to: student.email,
+        subject: `Your Weekly CP Digest — ${student.codeforces_handle}`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: auto;">
+            <h2>👋 Hey ${student.name || student.codeforces_handle}!</h2>
+            <p>${summary}</p>
+            <a href="${process.env.FRONTEND_URL}/profile/${student.codeforces_handle}"
+               style="background:#3b82f6;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;margin-top:16px">
+              View Full Analysis →
+            </a>
+            <p style="color:#888;font-size:12px;margin-top:24px">
+              Unsubscribe anytime from Settings.
+            </p>
+          </div>
+        `,
+      });
+    } catch (err) {
+      console.error(`Failed digest for ${student.codeforces_handle}:`, err);
+    }
+  }
+});

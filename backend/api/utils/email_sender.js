@@ -10,7 +10,8 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS
   }
 });
-
+console.log(process.env.EMAIL_USER, " is email user")
+console.log(process.env.EMAIL_PASS, " is email user pass")
 transporter.verify((error, success) => {
   if (error) {
     console.error("Email transporter setup failed:", error.message);
@@ -26,7 +27,6 @@ export const checkInactivityAndSendEmail = async (student) => {
   }
 
   try {
-    // Fetch last 100 submissions
     const res = await axios.get(`https://codeforces.com/api/user.status?handle=${codeforces_handle}&count=100`);
     const submissions = res.data.result;
 
