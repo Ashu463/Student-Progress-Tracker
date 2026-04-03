@@ -5,6 +5,7 @@ import axios from 'axios';
 const API_BASE = 'https://tle-eleminators-backend.vercel.app';
 
 console.log(API_BASE, ' is the base url')
+console.log(window.location.origin, ' is the recent logger')
 const StudentForm = ({ student, onSubmit, onCancel }) => {
   const { isDark } = useTheme();
   const [formData, setFormData] = useState({
