@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_BASE = 'https://tle-eleminators-backend.vercel.app';
+
 function generateHeatmapFromSubmissions(submissions, days = 365) {
   const heatmap = {};
   const now = Date.now();
@@ -20,7 +20,7 @@ function generateHeatmapFromSubmissions(submissions, days = 365) {
 const studentData = {
   async getContestHistory(cf_handle, days) {
     try {
-      const response = await axios.get(`${API_BASE}/api/students/${cf_handle}`);
+      const response = await axios.get(`http://localhost:3000/api/students/${cf_handle}`);
       console.log('Response from API:', response.data);
       const ratingHistory = response.data.data.ratingHistory;
       const now = Date.now();
@@ -50,7 +50,7 @@ const studentData = {
 
   async getProblemStats(cf_handle, days) {
     try {
-      const response = await axios.get(`${API_BASE}/api/students/${cf_handle}`);
+      const response = await axios.get(`http://localhost:3000/api/students/${cf_handle}`);
       const ratingHistory = response.data.data.ratingHistory;
       const submissions = response.data.data.submissions;
 
