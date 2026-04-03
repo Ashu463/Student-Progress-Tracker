@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const BACKEND_URL = "http://localhost:3000";
+const BACKEND_URL = "https://tle-eleminators-backend.vercel.app";
 
 const difficultyColor = (rating) => {
   if (rating < 1200) return "text-gray-400";
