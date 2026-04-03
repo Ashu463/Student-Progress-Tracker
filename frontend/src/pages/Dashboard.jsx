@@ -5,7 +5,7 @@ import Modal from '../components/Modal';
 import StudentForm from '../components/StudentForm';
 import { useNavigate } from 'react-router-dom';
 
-const API_BASE = 'https://tle-eleminators-backend.vercel.app/';
+const API_BASE = 'https://tle-eleminators-backend.vercel.app';
 console.log(API_BASE, ' is the base url');
 
 const Dashboard = () => {

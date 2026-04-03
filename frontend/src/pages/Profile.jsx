@@ -10,7 +10,7 @@ import ProblemRecommender from "../components/ProblemRecommender";
 
 import axios from 'axios';
 
-const API_BASE = 'https://tle-eleminators-backend.vercel.app/';
+const API_BASE = 'https://tle-eleminators-backend.vercel.app';
 
 const Profile = () => {
   const { isDark } = useTheme();

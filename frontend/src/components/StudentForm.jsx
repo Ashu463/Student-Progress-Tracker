@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 
-const API_BASE = 'https://tle-eleminators-backend.vercel.app/';
+const API_BASE = 'https://tle-eleminators-backend.vercel.app';
 
 console.log(API_BASE, ' is the base url')
 const StudentForm = ({ student, onSubmit, onCancel }) => {
