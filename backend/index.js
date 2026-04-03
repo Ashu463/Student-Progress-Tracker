@@ -9,7 +9,7 @@ import { startCron } from './api/utils/start_cron.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(cors({
-  origin: ['https://tle-eleminators.vercel.app', 'http://localhost:5173'],
+  origin: ['https://tleeleliminatorsbackend.vercel.app', 'http://localhost:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
