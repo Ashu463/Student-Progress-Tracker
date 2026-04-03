@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const BACKEND_URL = "http://localhost:3000"; // change if backend runs elsewhere
+const BACKEND_URL = "https://tle-eleminators-backend.vercel.app"; // change if backend runs elsewhere
 
 const priorityConfig = {
   high: { color: "text-red-400", bg: "bg-red-400/10", badge: "bg-red-500" },
