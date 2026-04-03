@@ -2,8 +2,9 @@ import axios from 'axios';
 export const fetchCodeforcesUserData = async (handle) => {
   try {
     // Check if user exists and get basic info
-    const userResponse = await axios.get(`https://codeforces.com/api/user.info?handles=${handle}`);
-    const userData = await userResponse.data;
+    // const userResponse = await axios.get(`https://codeforces.com/api/user.info?handles=${handle}`);
+    const userResponse = await fetch(`https://codeforces.com/api/user.info?handles=${handle}`);
+    const userData = await userResponse.json();
     
     if (userData.status !== 'OK') {
       throw new Error('User not found');
@@ -11,11 +12,12 @@ export const fetchCodeforcesUserData = async (handle) => {
     
     const user = userData.result[0];
     
-    const ratingResponse = await axios.get(`https://codeforces.com/api/user.rating?handle=${handle}`);
-    const ratingData = await ratingResponse.data
+    // const ratingResponse = await axios.get(`https://codeforces.com/api/user.rating?handle=${handle}`);
+    const ratingResponse = await fetch(`https://codeforces.com/api/user.rating?handle=${handle}`);
+    const ratingData = await ratingResponse.json();
 
-    const userStatus = await axios.get(`https://codeforces.com/api/user.status?handle=${handle}`);
-    const userStatusData = await userStatus.data;
+    const userStatus = await fetch(`https://codeforces.com/api/user.status?handle=${handle}`);
+    const userStatusData = await userStatus.json();
     if (userStatusData.status !== 'OK') {
       throw new Error('Failed to fetch user status');
     }

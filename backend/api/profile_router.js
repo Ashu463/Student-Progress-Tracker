@@ -22,11 +22,13 @@ export const getProblemPool = async () => {
       return problemPoolCache;
     }
 
-    const res = await axios.get(
-      "https://codeforces.com/api/problemset.problems"
-    );
+    const res = await fetch("https://codeforces.com/api/problemset.problems");
 
-    const problems = res.data.result.problems;
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    const problems = await res.json();
 
     problemPoolCache = problems;
 
