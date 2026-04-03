@@ -27,16 +27,8 @@ export const checkInactivityAndSendEmail = async (student) => {
   }
 
   try {
-    const res = await fetch(
-      `https://codeforces.com/api/user.status?handle=${codeforces_handle}&count=100`
-    );
-
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-
-    const data = await res.json();
-    const submissions = data.result;
+    const res = await axios.get(`https://codeforces.com/api/user.status?handle=${codeforces_handle}&count=100`);
+    const submissions = res.data.result;
 
     const now = Date.now();
     const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
